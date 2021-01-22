@@ -197,6 +197,47 @@ tar: Removing leading `/' from member names
 
 
 
+pmap -p 22419
+22419:   /usr/jdk64/jdk1.8.0_112/bin/java -Dhdp.version=2.6.3.0-235 -cp /usr/hdp/current/spark2-client/conf/:/usr/hdp/current/spark2-client/jars/*:/usr/hdp/2.6.3.0-235/hadoop/conf/ -Xmx12G org.apache.spark.deploy.SparkSubmit --master yarn-client --conf spark.driver.memory=12G sparkr-shell /tmp/Rtmp1opeNS/backend_port52dd50465d4
+0000000000400000      4K r-x-- /usr/jdk64/jdk1.8.0_112/bin/java
+0000000000600000      4K rw--- /usr/jdk64/jdk1.8.0_112/bin/java
+
+
+# TOMS ISSUE >> USE TOP >> && PMAP  && KILL -9 
+
+netstat -tulpen | grep -E 30572
+tcp        0      0 0.0.0.0:8480            0.0.0.0:*               LISTEN      8763       66372151   30572/java
+tcp        0      0 0.0.0.0:8485            0.0.0.0:*               LISTEN      8763       66372153   30572/java
+
+
+netstat -tulpen | grep -E -- '(agent.21283|ssh-agent)'
+
+
+time sudo netstat -ap | grep -E -- '(agent.21283|ssh-agent)' >/dev/null
+
+
+ lsof +L1
+
+lsof -p 30572
+
+java    30572 hdfs  cwd       DIR              253,0      4096 100872200 /usr/hdp/2.6.3.0-235/hadoop
+java    30572 hdfs  rtd       DIR              253,0      4096      1024 /
+java    30572 hdfs  txt       REG              253,0      7734    256063 /usr/jdk64/jdk1.8.0_112/bin/java
+java    30572 hdfs  mem       REG              253,0      7652  17024007 /usr/jdk64/jdk1.8.0_112/jre/lib/amd64/libjaas_unix.so
+java    3
+
+################################
+# USE pmap to search PID  {}  AND CUT PROCESS details 
+
+pmap 30572  | head -1
+30572:   /usr/jdk64/jdk1.8.0_112/bin/java -Dproc_journalnode -Xmx1024m -Dhdp.version=2.6.3.0-235 -Djava.net.preferIPv4Stack=true -Dhdp.version= -Djava.net.preferIPv4Stack=true -Dhdp.version= -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/var/log/hadoop/hdfs -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/usr/hdp/2.6.3.0-235/hadoop -Dhadoop.id.str=hdfs -Dhadoop.root.logger=INFO,console -Djava.library.path=:/usr/hdp/2.6.3.0-235/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.6.3.0-235/hadoop/lib/native/Linux-amd64-64
+
+# ps aux | awk '$2 == 1 { print $0 }'
+
+
+
+# memory usage per process 
+ps -o pid,user,%mem,command ax | sort -b -k3 -r
 
 
 
