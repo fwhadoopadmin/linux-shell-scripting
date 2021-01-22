@@ -1,0 +1,208 @@
+########################################################
+
+# get users & groups 
+
+cat /etc/passwd | awk -F':' '{ print $1}' | xargs -n1 groups
+
+getent group  App_TfsDataAnalyticsDevelopers_6
+
+id | egrep -o 'groups=.*' | sed 's/,/\n/g' | cut -d'(' -f2 | sed 's/)//'
+
+
+Deleting the filename doesn't actually delete the file.
+
+Why is space not being freed from disk after deleting a file in Red Hat Enterprise Linux?
+
+Deleting the filename doesn't actually delete the file.
+
+/usr/sbin/lsof | grep deleted
+lsof /var/log/hadoop
+COMMAND   PID   USER   FD   TYPE DEVICE    SIZE/OFF      NODE NAME
+java    10376   hdfs    1w   REG 253,10         728       522 /var/log/hadoop/hdfs/hadoop-hdfs-zkfc-ricplhadoop1002.dominionnet.com.out (deleted)
+java    10376   hdfs    2w   REG 253,10         728       522 /var/log/hadoop/hdfs/hadoop-hdfs-zkfc-ricplhadoop1002.dominionnet.com.out (deleted)
+
+ This is an advanced technique and should only be carried out when the administrator is certain that
+ this will cause no adverse effects to running processes. Applications may not be designed to deal elegantly with this situation and may produce inconsistent or undefined behavior when files that are in use are abruptly truncated in this manner.
+
+Raw
+$ echo > /proc/pid/fd/fd_number
+
+
+To identify the used file size (in blocks), use the command below:
+
+ lsof -Fn -Fs |grep -B1 -i deleted | grep ^s  | cut -c 2- | awk '{s+=$1} END {print s}'
+ 
+  lsof -Fn -Fs |grep -B1 -i deleted | grep ^s  | cut -c 2- | awk '{s+=$1} END {print s}'
+23000390716980
+
+Some other process is holding the file open, causing it to not be deleted; restart or kill that process to release the file.
+
+Use
+
+lsof +L1
+
+
+################################
+
+1. Kill the current operation if already going on from ambari for namenode startup
+
+2. set hadoop.root.logger=DEBUG,console
+
+3. Try executing the below command
+
+/usr/hdp/current/hadoop–client/sbin/hadoop–daemon.sh —config /usr/hdp/current/hadoop–client/conf start namenode‘
+
+ 
+ ##############################
+ 
+ 
+
+
+###############################################################################################################
+
+cat /etc/passwd |grep -i 20000
+10:15:08 [1]root@MYDOMAIN:~ # cat /etc/group |grep -i 20000
+10:15:21 [1]root@MYDOMAIN:~ # groupadd -g 20000 test_analytics
+10:17:52 root@MYDOMAIN:~ # cat /etc/group |grep -i test_analytics
+test_analytics:x:20000:
+10:18:16 root@MYDOMAIN:~ # useradd -g 20000 -s /bin/bash  -d  /export/home/test_analytics -u  20000 test_analytics
+10:20:32 root@MYDOMAIN:~ # id test_analytics
+uid=20000(test_analytics) gid=20000(test_analytics) groups=20000(test_analytics)
+10:20:40 root@MYDOMAIN:~ #
+
+##############################################################
+
+10:25:57 root@MYDOMAIN:/tmp # usermod -u 99999 test_analytics
+10:26:38 root@MYDOMAIN:/tmp # id test_analytics
+uid=99999(test_analytics) gid=20000(test_analytics) groups=20000(test_analytics)
+10:26:44 root@MYDOMAIN:/tmp # sudo su - test_analytics
+Last login: Fri Jun  5 10:24:52 EDT 2020 on pts/0
+[test_analytics@MYDOMAIN ~]$ ll
+total 4
+-rw-rw-r--. 1 test_analytics test_analytics 28 Jun  5 10:25 text1.txt
+[test_analytics@MYDOMAIN ~]$ touch text2
+[test_analytics@MYDOMAIN ~]$ ll
+total 4
+-rw-rw-r--. 1 test_analytics test_analytics 28 Jun  5 10:25 text1.txt
+-rw-rw-r--. 1 test_analytics test_analytics  0 Jun  5 10:27 text2
+[test_analytics@MYDOMAIN ~]$
+
+ find / -user 8759 -exec  ls -l {} \;
+
+https://www.ibm.com/support/knowledgecenter/STXKQY_BDA_SHR/bl1adv_userandgrpid.htm 
+
+
+useradd -g 20000 -s /bin/bash  -d  /export/home/test_analytics -u  20000 test_analytics
+
+sudo useradd -g 20000 -s /bin/bash  -d  /export/home/test_analytics -u  20000 test_analytics
+
+sudo usermod -a -G docker $USER
+
+
+sudo groupadd -g 30000 docker 
+
+sudo useradd -g 30000 -s /bin/bash  -d  /export/home/docker  -u  30000 docker 
+
+[ambari@vdcplhdps1004 ~]$ id docker
+uid=30000(docker) gid=30000(docker) groups=30000(docker)
+[ambari@vdcplhdps1004 ~]$
+
+sudo systemctl restart docker
+
+####################################
+# EMAIL DESTRO 
+
+MEEE MEEER | Enterprise Data Analytics
+Office:  804-273-2844 |    Mobile: (423) 579-0481 |   Mail: MYNAME@ME.com
+Dominion Resources Services, Inc. | 8th and Main/5th Floor | 707 E. Main St, Richmond, VA 23219
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ PASSWORD ENCRYPTION 
+
+################################
+
+# echo -n admin123 | makepasswd --crypt-md5 --clearfrom -
+admin123     $1$ZUNNSLzQ$XsViFC1bhucsr3f8AzMPt/
+As commented bellow this command is unsecure. True method - write password in file with text editor, and read password from file.
+
+
+
+Another way is this: openssl passwd -1 -stdin <<< password_here
+
+
+#####################################################################
+Encrypt File
+
+Use the openssl comand to encrypt your file and then test the new file is fully encrypted.
+
+[root@linux tmp]# openssl aes-256-cbc -salt -in secretfile.txt -out secretfile.txt.aes
+enter aes-256-cbc encryption password:
+Verifying - enter aes-256-cbc encryption password:
+
+[root@linux tmp]# cat  secretfile.txt.aes
+3b¦ted__Ù.:SLìÕ§ÕL<Jdc
+u3AÈF\V!ê:S2;³âÿ.LfjÏ©ù!_b*&)Stfù 
+
+Decrypt File
+
+Decrypt the file and then confirm the decypted file is readable.
+
+[root@linux tmp]# openssl aes-256-cbc -d -salt -in secretfile.txt.aes -out secretfile.txt
+enter aes-256-cbc decryption password:
+
+[root@linux tmp]# cat secretfile.txt
+This is a secret file that we do not want anyone to read.  
+
+
+Further notes : In a non-interactive scenario (such as using this within a script) were you require no input from the 
+shell (user), you can use the -k to specify the password. 
+Such as `openssl aes-256-cbc -salt -in secretfile.txt -out secretfile.txt.aes -k [password]`.
+####################################################
+
+. Encrypt the grub password using grub-crypt
+
+
+# grub-crypt
+Password: GrbPwd4SysAd$
+Retype password: GrbPwd4SysAd$
+^9^32kwzzX./3WISQ0C
+
+# grub-crypt --sha-256
+# grub-crypt --md5
+
+password --encrypted ^9^32kwzzX./3WISQ0C /etc/mymenu.lst
+password --encrypted ^9^32kwzzX./3WISQ0C
+
+#############################################
+ tar multiple files 
+
+Update from L2 Team:
+Hbase is not starting due to HDFS. Please lets focus now in starting the HDFS environment and will review the rest f the services later.
+2020-05-20 10:18:41,947 - No active NameNode was found after 10 retries. Will return current NameNode HA states
+To start, please share the following files:
+1) Provide configuration information (From Active NameNode)
+tar -czhvf /tmp/hdfs_all_conf_$(hostname -f)_$(date +"%Y%m%d%H%M%S").tgz /etc/hadoop/conf/* /etc/sysctl.conf /etc/krb5.conf /etc/security/limits* /etc/hosts 2>/dev/null
+
+2) Provide log files (From Active and Standby NameNode)
+
+tar -czvhf /tmp/hdfs_logs_$(hostname)_$(date +"%Y%m%d%H%M%S").tgz $(find /var/log/hadoop/hdfs -type f | egrep -vi 'audit|SecurityAuth')
+
+ tar -czvhf /tmp/hdfs_logs_$(hostname)_$(date +"%Y%m%d%H%M%S").tgz $(find /var/log/hadoop/hdfs -type f | egrep -vi 'audit|SecurityAuth’)
+> ^C
+16:04:33 [130]root@vdcplhdps1002:~ # tar -czvhf /tmp/hdfs_logs_$(hostname)_$(date +"%Y%m%d%H%M%S").tgz $(find /var/log/hadoop/hdfs -type f | egrep -vi 'audit|SecurityAuth')
+tar: Removing leading `/' from member names
+
+
+
+
+
+
+
+
+
+
+
+
+ 
