@@ -242,8 +242,34 @@ ps -o pid,user,%mem,command ax | sort -b -k3 -r
 
 
 
+/bin/sudo /bin/truncate -s 0 /var/log/hadoop/hdfs/audit/solr/spool/spool_hdfs_*
+cat /export/home/ambari/haadmin/scripts/truncate_logs.sh
+#!/bin/sh
+#PATH="/var/log/hadoop/hdfs"
+#FILE=`/bin/ls $PATH | /bin/grep 'hdfs-aduit.log$'`
+#`/bin/sudo /usr/bin/truncate -s 0 $PATH/$FILE`
 
+sudo su - -c "vim /var/log/atlas/create_tar.sh"
+sudo su - -c "vim /opt/fwsysadmin_admintools/clean_hivelogs.sh"
 
-
+sudo su - hive -c "/bin/find /var/log/hive -name "hivemetastore*" -type f -mtime +10 -exec ls -l {} \;"
 
  
+ check uids 
+ 
+ id mmmm -sa
+getent group app_uxonpremisebmmmm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
