@@ -260,10 +260,16 @@ sudo su - hive -c "/bin/find /var/log/hive -name "hivemetastore*" -type f -mtime
  id mmmm -sa
 getent group app_uxonpremisebmmmm
 
+permissions settings 
+
+ grep simple /etc/sssd/sssd.conf
+
+sudo grep simple /etc/sssd/sssd.conf
+access_provider = simple
 
 
-
-
+ grep simple /etc/sssd/sssd.conf
+  992  sudo grep simple /etc/sssd/sssd.conf
 
 
 
