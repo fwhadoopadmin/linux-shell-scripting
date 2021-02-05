@@ -1,0 +1,21 @@
+#######################################################################
+0 */2 * * *  /opt/fwsysadmin_admintools/zip_audit_logs.sh    >/dev/null 2>&1
+0 8 * * *  /opt/fwsysadmin_admintools/zip_gc-worker_logs.sh   >/dev/null 2>&1
+0 0 * * *  /opt/fwsysadmin_admintools/zip_atlas_logs.sh   >/dev/null 2>&1
+0 8 * * *  /opt/fwsysadmin_admintools/clean_var_spool.sh >/dev/null 2>&1
+*/30 * * * * /opt/fwsysadmin_admintools/clean_var_spoolzipfiles.sh >/dev/null 2>&1
+
+*/30 * * * * /opt/fwsysadmin_admintools/remove_all_zipfiles_hadoop.sh >/dev/null 2>&1
+*/30 * * * * /opt/fwsysadmin_admintools/remove_zipfiles_hadoop.sh >/dev/null 2>&1
+*/30 * * * * /opt/fwsysadmin_admintools/clean_var_spoolzipfiles.sh >/dev/null 2>&1
+*/5 * * * * /opt/fwsysadmin_admintools/zip_var_spoolzipfiles.sh  >/dev/null 2>&1
+[ambari@ricplhadoop1002 log]$ cat /opt/fwsysadmin_admintools/clean_var_spoolzipfiles.sh
+0 * * * * /usr/hdp/share/hst/bin/hst-scheduled-capture.sh sync
+0 2 * * 0 /usr/hdp/share/hst/bin/hst-scheduled-capture.sh
+#* * * * * /tmp/top.sh
+###################################################################################
+*/30 * * * * /var/log/hadoop/hdfs/audit/solr/spool/rotate_all_zipslogs.sh >/dev/null 2>&1
+############
+#cpu usage
+*/10 * * * * /opt/sysadmin/cpuusage/cpumonirot.sh  >/dev/null 2>&1
+0 * * * * /opt/sysadmin/cpuusage/hadooplogclenup.sh >/dev/null 2>&1
