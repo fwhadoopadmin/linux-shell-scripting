@@ -1,0 +1,425 @@
+########################################################################
+
+09:31:44 root@ricplhadoop1011:/hadoop # fdisk -l |grep /sd
+WARNING: fdisk GPT support is currently new, and therefore in an experimental phase. Use at your own discretion.
+Disk /dev/sdb: 4000.8 GB, 4000787030016 bytes, 7814037168 sectors
+Disk /dev/sda: 4000.8 GB, 4000787030016 bytes, 7814037168 sectors
+Disk /dev/sdc: 4000.8 GB, 4000787030016 bytes, 7814037168 sectors
+Disk /dev/sdd: 4000.8 GB, 4000787030016 bytes, 7814037168 sectors
+Disk /dev/sdg: 300.0 GB, 299966445568 bytes, 585871964 sectors
+Disk /dev/sde: 4000.8 GB, 4000787030016 bytes, 7814037168 sectors
+09:32:02 root@ricplhadoop1011:/hadoop # ssacli ctrl slot=0 pd all show status
+
+   physicaldrive 1I:1:1 (port 1I:box 1:bay 1, 4 TB): OK
+   physicaldrive 1I:1:2 (port 1I:box 1:bay 2, 4 TB): OK
+   physicaldrive 1I:1:3 (port 1I:box 1:bay 3, 4 TB): OK
+   physicaldrive 1I:1:4 (port 1I:box 1:bay 4, 4 TB): OK
+   physicaldrive 2I:1:5 (port 2I:box 1:bay 5, 4 TB): OK
+   physicaldrive 2I:1:6 (port 2I:box 1:bay 6, 4 TB): OK
+
+
+09:36:28 [2]root@ricplhadoop1011:/hadoop # ssacli ctrl slot=0 pd all show detail |grep -i "Disk Name"
+         Disk Name: /dev/sda
+         Disk Name: /dev/sdb
+         Disk Name: /dev/sdc
+         Disk Name: /dev/sdd
+         Disk Name: /dev/sde
+09:36:36 root@ricplhadoop1011:/hadoop #
+
+# disk name missing on disk 6 
+
+ physicaldrive 2I:1:6
+         Port: 2I
+         Box: 1
+         Bay: 6
+         Status: OK
+         Drive Type: HBA Mode Drive
+         Interface Type: SATA
+         Size: 4 TB
+         Drive exposed to OS: True
+         Logical/Physical Block Size: 512/512
+         Rotational Speed: 7200
+         Firmware Revision: HPG4
+         Serial Number: ZC132ZVJ
+         WWID: 300143804271BEC9
+         Model: ATA     MB4000GVYZK
+         SATA NCQ Capable: True
+         SATA NCQ Enabled: True
+         Current Temperature (C): 32
+         Maximum Temperature (C): 36
+         PHY Count: 1
+         PHY Transfer Rate: 6.0Gbps
+         Drive Authentication Status: OK
+         Carrier Application Version: 11
+         Carrier Bootloader Version: 6
+         Sanitize Erase Supported: False
+         Shingled Magnetic Recording Support: None
+         
+         
+       ssacli ctrl slot=0 pd all show detail
+
+Smart Array P440ar in Slot 0 (Embedded)
+
+   HBA Drives
+
+      physicaldrive 1I:1:1
+         Port: 1I
+         Box: 1
+         Bay: 1
+         Status: OK
+         Drive Type: HBA Mode Drive
+         Interface Type: SATA
+         Size: 4 TB
+         Drive exposed to OS: True
+         Logical/Physical Block Size: 512/512
+         Rotational Speed: 7200
+         Firmware Revision: HPG4
+         Serial Number: ZC132ZB8
+         WWID: 300143804271BEC0
+         Model: ATA     MB4000GVYZK
+         SATA NCQ Capable: True
+         SATA NCQ Enabled: True
+         Current Temperature (C): 32
+         Maximum Temperature (C): 37
+  
+         
+         
+          ssacli ctrl slot=0 pd all show detail |grep -i "Disk Name"
+         Disk Name: /dev/sda
+         Disk Name: /dev/sdb
+         Disk Name: /dev/sdc
+         Disk Name: /dev/sdd
+         Disk Name: /dev/sde
+
+         blkid
+/dev/block/253:1: UUID="d3a9dda1-a73c-4c5f-a188-63fe75d106d5" TYPE="swap"
+/dev/sdb: UUID="af1966be-bd0f-43b4-b5f9-9566d15f0051" TYPE="xfs"
+/dev/sda: UUID="97cafac4-1ebb-4083-9568-267b2e23aba0" TYPE="xfs"
+/dev/sdc: UUID="f86ad66b-14a2-4bab-95c7-c8adb103160b" TYPE="xfs"
+/dev/sdd: UUID="453b322c-46f5-4418-b5ba-9251b75b15f7" TYPE="xfs"
+/dev/sde: UUID="17e9cd27-1bbb-4368-9008-19ab24d935ba" TYPE="xfs"
+/dev/sdg1: SEC_TYPE="msdos" UUID="35CC-E810" TYPE="vfat" PARTLABEL="EFI System Partition" PARTUUID="1043c5e7-5577-458c-80ab-8d69dc083f75"
+/dev/sdg2: UUID="dc142a82-dfa8-4c64-b28b-283e85b36e02" TYPE="xfs" PARTUUID="abf24222-d15b-4de8-9b3e-09b5510ce6e4"
+/dev/sdg3: UUID="COb8cB-kbJ1-j0FY-QVqt-IX0r-ZzF6-Rxo6M5" TYPE="LVM2_member" PARTUUID="d78a83c1-7519-48bc-a342-892bbe5b094a"
+/dev/dm-4: UUID="b6dc8177-2371-4c05-a264-5e6264367c90" TYPE="ext3"
+/dev/dm-3: UUID="52a314a5-5a0d-4e68-bc47-fee3406cef46" TYPE="xfs"
+/dev/dm-0: UUID="d982b583-8212-4344-b9e1-4ae508833e33" TYPE="xfs"
+/dev/dm-2: UUID="0129c310-bb34-413d-9b86-a4f25c4536e4" TYPE="xfs"
+ 
+  fuser -c /hadoop/disk6 | awk '{print $4}
+ 
+ fuser -c /hadoop/disk6
+Cannot stat /hadoop/disk6: Input/output error
+Cannot stat file /proc/17555/fd/86: Input/output error
+Cannot stat file /proc/17555/fd/90: Input/output error
+Cannot stat file /proc/17555/fd/147: Input/output error
+Cannot stat file /proc/17555/fd/153: Input/output error
+Cannot stat file /proc/17555/fd/154: Input/output error
+Cannot stat file /proc/17555/fd/180: Input/output error
+Cannot stat file /proc/17555/fd/187: Input/output error
+Cannot stat file /proc/17555/fd/202: Input/output error
+Cannot stat file /proc/17555/fd/205: Input/output error
+
+ #INODES 
+ 
+  df -i
+Filesystem                                         Inodes   IUsed     IFree IUse% Mounted on
+/dev/mapper/vg00-root                            52424704  254821  52169883    1% /
+devtmpfs                                         66005435     687  66004748    1% /dev
+tmpfs                                            66008172      20  66008152    1% /dev/shm
+tmpfs                                            66008172    1011  66007161    1% /run
+tmpfs                                            66008172      16  66008156    1% /sys/fs/cgroup
+/dev/mapper/vg00-bp                                655360     198    655162    1% /usr/bp
+/dev/sdc                                        390701824 2737289 387964535    1% /hadoop/disk3
+/dev/sdf                                        390701824 2736843 387964981    1% /hadoop/disk6
+/dev/sdb                                        390701824 2736848 387964976    1% /hadoop/disk2
+/dev/sda                                        390701824 2755750 387946074    1% /hadoop/disk1
+/dev/sdd                                        390701824 2737147 387964677    1% /hadoop/disk4
+/dev/sde                                        390701824 2739950 387961874    1% /hadoop/disk5
+/dev/sdg2                                          509952      26    509926    1% /boot
+/dev/sdg1                                               0       0         0     - /boot/efi
+
+
+ 
+ 
+ #Unmount 
+ umount -v /hadoop/disk6
+ umount -v -f /hadoop/disk6
+ 
+ 
+    #mount 
+    
+    
+     mount  /hadoop/disk6
+     
+     
+         
+        cat /var/log/messages | grep -i Error 
+        
+       Feb 15 07:57:46 ricplhadoop1011 kernel: Buffer I/O error on dev sdf, logical block 765623078, lost async page write
+Feb 15 07:57:55 ricplhadoop1011 kernel: XFS (sdf): metadata I/O error: block 0x15d58f170 ("xfs_trans_read_buf_map") error 5 numblks 8
+Feb 15 07:57:55 ricplhadoop1011 kernel: XFS (sdf): Internal error xfs_trans_cancel at line 990 of file fs/xfs/xfs_trans.c.  Caller xfs_inactive_truncate+0xe5/0x120 [xfs]
+Feb 15 07:57:55 ricplhadoop1011 kernel: [<ffffffffa03abbcb>] xfs_error_report+0x3b/0x40 [xfs]
+Feb 15 07:57:55 ricplhadoop1011 kernel: XFS (sdf): metadata I/O error: block 0xe904d3de ("xlog_iodone") error 5 numblks 64
+Feb 15 07:57:55 ricplhadoop1011 kernel: XFS (sdf): Log I/O Error Detected.  Shutting down filesystem
+Feb 15 07:57:55 ricplhadoop1011 kernel: XFS (sdf): metadata I/O error: block 0xe904d41e ("xlog_iodone") error 5 numblks 64
+ 
+       journalctl -ax |grep -i /dev/sdf
+Feb 15 09:08:16 ricplhadoop1011 sudo[21030]:     root : TTY=pts/1 ; PWD=/hadoop ; USER=root ; COMMAND=/sbin/smartctl /dev/sdf
+09:11:06 root@ricplhadoop1011:/hadoop #
+  
+         journalctl -ax
+
+  yum -y install smartmontools
+ 
+ 
+ 
+ 
+         smartctl -a /dev/sda
+smartctl 6.2 2013-07-26 r3841 [x86_64-linux-3.10.0-514.26.2.el7.x86_64] (local build)
+Copyright (C) 2002-13, Bruce Allen, Christian Franke, www.smartmontools.org
+
+=== START OF INFORMATION SECTION ===
+Device Model:     MB4000GVYZK
+Serial Number:    ZC132ZB8
+LU WWN Device Id: 5 000c50 0a4476ed2
+Firmware Version: HPG4
+User Capacity:    4,000,787,030,016 bytes [4.00 TB]
+Sector Size:      512 bytes logical/physical
+Rotation Rate:    7200 rpm
+Device is:        Not in smartctl database [for details use: -P showall]
+ATA Version is:   ACS-3 (unknown minor revision code: 0x006d)
+SATA Version is:  SATA 3.1, 6.0 Gb/s (current: 6.0 Gb/s)
+Local Time is:    Mon Feb 15 09:03:12 2021 EST
+SMART support is: Available - device has SMART capability.
+SMART support is: Enabled
+
+=== START OF READ SMART DATA SECTION ===
+SMART overall-health self-assessment test result: PASSED
+
+General SMART Values:
+Offline data collection status:  (0x82) Offline data collection activity
+                                        was completed without error.
+                                        Auto Offline Data Collection: Enabled.
+Self-test execution status:      (   0) The previous self-test routine completed
+                                        without error or no self-test has ever
+                                        been run.
+Total time to complete Offline
+data collection:                (  575) seconds.
+Offline data collection
+capabilities:                    (0x7b) SMART execute Offline immediate.
+                                        Auto Offline data collection on/off support.
+                                        Suspend Offline collection upon new
+                                        command.
+                                        Offline surface scan supported.
+                                        Self-test supported.
+                                        Conveyance Self-test supported.
+                                        Selective Self-test supported.
+SMART capabilities:            (0x0003) Saves SMART data before entering
+                                        power-saving mode.
+                                        Supports SMART auto save timer.
+Error logging capability:        (0x01) Error logging supported.
+                                        General Purpose Logging supported.
+Short self-test routine
+recommended polling time:        (   2) minutes.
+Extended self-test routine
+recommended polling time:        ( 400) minutes.
+Conveyance self-test routine
+recommended polling time:        (   3) minutes.
+SCT capabilities:              (0x1025) SCT Status supported.
+                                        SCT Data Table supported.
+
+SMART Attributes Data Structure revision number: 10
+Vendor Specific SMART Attributes with Thresholds:
+ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE
+  1 Raw_Read_Error_Rate     0x000f   080   064   044    Pre-fail  Always       -       105212490
+  3 Spin_Up_Time            0x0003   093   093   070    Pre-fail  Always       -       0
+  5 Reallocated_Sector_Ct   0x0033   100   100   010    Pre-fail  Always       -       0
+  7 Seek_Error_Rate         0x000f   095   060   045    Pre-fail  Always       -       3131556164
+  9 Power_On_Hours          0x0032   069   069   000    Old_age   Always       -       28000
+ 10 Spin_Retry_Count        0x0013   100   100   097    Pre-fail  Always       -       0
+180 Unknown_HDD_Attribute   0x003b   100   100   030    Pre-fail  Always       -       750424036
+194 Temperature_Celsius     0x0022   032   040   000    Old_age   Always       -       32 (0 19 0 0 0)
+196 Reallocated_Event_Count 0x0033   100   100   010    Pre-fail  Always       -       0
+
+SMART Error Log not supported
+
+SMART Self-test Log not supported
+
+SMART Selective self-test log data structure revision number 1
+ SPAN  MIN_LBA  MAX_LBA  CURRENT_TEST_STATUS
+    1        0        0  Not_testing
+    2        0        0  Not_testing
+    3        0        0  Not_testing
+    4        0        0  Not_testing
+    5        0        0  Not_testing
+Selective self-test flags (0x0):
+  After scanning selected spans, do NOT read-scan remainder of disk.
+If Selective self-test is pending on power-up, resume after 0 minute delay.
+
+     dmesg --notime | tail -15
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): Unmounting Filesystem
+XFS (sdf): xfs_log_force: error -5 returned.
+XFS (sdf): xfs_log_force: error -5 returned.
+
+
+
+findmnt
+TARGET                           SOURCE               FSTYPE      OPTIONS
+/                                /dev/mapper/vg00-root
+                                                      xfs         rw,relatime,seclabel,attr2,inode64,logbsize=256k,sunit=512,swidth=512,noquota
+├─/sys                           sysfs                sysfs       rw,nosuid,nodev,noexec,relatime,seclabel
+│ ├─/sys/kernel/security         securityfs           securityfs  rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/fs/cgroup               tmpfs                tmpfs       ro,nosuid,nodev,noexec,seclabel,mode=755
+│ │ ├─/sys/fs/cgroup/systemd     cgroup               cgroup      rw,nosuid,nodev,noexec,relatime,xattr,release_agent=/usr/lib/systemd/systemd-cgroups-agent,name=systemd
+│ │ ├─/sys/fs/cgroup/hugetlb     cgroup               cgroup      rw,nosuid,nodev,noexec,relatime,hugetlb
+│ │ ├─/sys/fs/cgroup/perf_event  cgroup               cgroup      rw,nosuid,nodev,noexec,relatime,perf_event
+│ │ ├─/sys/fs/cgroup/cpuset      cgroup               cgroup      rw,nosuid,nodev,noexec,relatime,cpuset
+│ │ ├─/sys/fs/cgroup/net_cls,net_prio
+                                 cgroup               cgroup      rw,nosuid,nodev,noexec,relatime,net_prio,net_cls
+│ │ ├─/sys/fs/cgroup/blkio       cgroup               cgroup      rw,nosuid,nodev,noexec,relatime,blkio
+│ │ ├─/sys/fs/cgroup/cpu,cpuacct cgroup               cgroup      rw,nosuid,nodev,noexec,relatime,cpuacct,cpu
+│ │ ├─/sys/fs/cgroup/memory      cgroup               cgroup      rw,nosuid,nodev,noexec,relatime,memory
+│ │ ├─/sys/fs/cgroup/pids        cgroup               cgroup      rw,nosuid,nodev,noexec,relatime,pids
+│ │ ├─/sys/fs/cgroup/freezer     cgroup               cgroup      rw,nosuid,nodev,noexec,relatime,freezer
+│ │ └─/sys/fs/cgroup/devices     cgroup               cgroup      rw,nosuid,nodev,noexec,relatime,devices
+│ ├─/sys/fs/pstore               pstore               pstore      rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/firmware/efi/efivars    efivarfs             efivarfs    rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/fs/selinux              selinuxfs            selinuxfs   rw,relatime
+│ ├─/sys/kernel/debug            debugfs              debugfs     rw,relatime
+│ └─/sys/kernel/config           configfs             configfs    rw,relatime
+├─/proc                          proc                 proc        rw,nosuid,nodev,noexec,relatime
+│ ├─/proc/sys/fs/binfmt_misc     systemd-1            autofs      rw,relatime,fd=32,pgrp=1,timeout=300,minproto=5,maxproto=5,direct
+│ │ └─/proc/sys/fs/binfmt_misc   binfmt_misc          binfmt_misc rw,relatime
+│ └─/proc/fs/nfsd                nfsd                 nfsd        rw,relatime
+├─/dev                           devtmpfs             devtmpfs    rw,nosuid,seclabel,size=264021740k,nr_inodes=66005435,mode=755
+│ ├─/dev/shm                     tmpfs                tmpfs       rw,nosuid,nodev,seclabel
+│ ├─/dev/pts                     devpts               devpts      rw,nosuid,noexec,relatime,seclabel,gid=5,mode=620,ptmxmode=000
+│ ├─/dev/mqueue                  mqueue               mqueue      rw,relatime,seclabel
+│ └─/dev/hugepages               hugetlbfs            hugetlbfs   rw,relatime,seclabel
+├─/run                           tmpfs                tmpfs       rw,nosuid,nodev,seclabel,mode=755
+│ ├─/run/user/8778               tmpfs                tmpfs       rw,nosuid,nodev,relatime,seclabel,size=52806540k,mode=700,uid=8778,gid=8778
+│ └─/run/user/7048               tmpfs                tmpfs       rw,nosuid,nodev,relatime,seclabel,size=52806540k,mode=700,uid=7048,gid=7000
+├─/hadoop/disk3                  /dev/sdc             xfs         rw,relatime,seclabel,attr2,inode64,noquota
+├─/boot                          /dev/sdg2            xfs         rw,relatime,seclabel,attr2,inode64,logbsize=256k,sunit=512,swidth=512,noquota
+│ └─/boot/efi                    /dev/sdg1            vfat        rw,relatime,fmask=0077,dmask=0077,codepage=437,iocharset=ascii,shortname=winnt,errors=remount-ro
+├─/var                           /dev/mapper/vg00-var xfs         rw,relatime,seclabel,attr2,inode64,logbsize=256k,sunit=512,swidth=512,noquota
+│ └─/var/lib/nfs/rpc_pipefs      sunrpc               rpc_pipefs  rw,relatime
+├─/export/home                   /dev/mapper/vg00-export_home
+                                                      xfs         rw,relatime,seclabel,attr2,inode64,logbsize=256k,sunit=512,swidth=512,noquota
+├─/usr/bp                        /dev/mapper/vg00-bp  ext4        rw,relatime,seclabel,stripe=64,data=ordered
+├─/hadoop/disk4                  /dev/sdd             xfs         rw,relatime,seclabel,attr2,inode64,noquota
+├─/hadoop/disk1                  /dev/sda             xfs         rw,relatime,seclabel,attr2,inode64,noquota
+├─/hadoop/disk2                  /dev/sdb             xfs         rw,relatime,seclabel,attr2,inode64,noquota
+├─/hadoop/disk5                  /dev/sde             xfs         rw,relatime,seclabel,attr2,inode64,noquota
+├─/misc                          /etc/auto.misc       autofs      rw,relatime,fd=7,pgrp=1770,timeout=300,minproto=5,maxproto=5,indirect
+├─/net                           -hosts               autofs      rw,relatime,fd=13,pgrp=1770,timeout=300,minproto=5,maxproto=5,indirect
+├─/home                          /etc/auto.home       autofs      rw,relatime,fd=19,pgrp=1770,timeout=300,minproto=5,maxproto=5,indirect
+│ └─/home/rajend3-dsa            nfshome.dominionnet.com:/homevol/qt/rajend3-dsa
+                                                      nfs         rw,relatime,vers=3,rsize=65536,wsize=65536,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=10.143.0.13,mount
+├─/app/laufg                     inbvdcvs01:/hadoop_sysetldev
+                                                      nfs         rw,relatime,vers=3,rsize=65536,wsize=65536,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=10.143.0.13,mount
+└─/app/laufg-dev                 inbvdcvs01:/hadoop_sysetldev_dev
+                                                      nfs         rw,relatime,vers=3,rsize=65536,wsize=65536,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=10.143.
+
+
+
+
+findmnt --types xfs
+TARGET          SOURCE                       FSTYPE OPTIONS
+/               /dev/mapper/vg00-root        xfs    rw,relatime,seclabel,attr2,inode64,logbsize=256k,sunit=512,swidth=512,noquota
+├─/hadoop/disk3 /dev/sdc                     xfs    rw,relatime,seclabel,attr2,inode64,noquota
+├─/boot         /dev/sdg2                    xfs    rw,relatime,seclabel,attr2,inode64,logbsize=256k,sunit=512,swidth=512,noquota
+├─/var          /dev/mapper/vg00-var         xfs    rw,relatime,seclabel,attr2,inode64,logbsize=256k,sunit=512,swidth=512,noquota
+├─/export/home  /dev/mapper/vg00-export_home xfs    rw,relatime,seclabel,attr2,inode64,logbsize=256k,sunit=512,swidth=512,noquota
+├─/hadoop/disk4 /dev/sdd                     xfs    rw,relatime,seclabel,attr2,inode64,noquota
+├─/hadoop/disk1 /dev/sda                     xfs    rw,relatime,seclabel,attr2,inode64,noquota
+├─/hadoop/disk2 /dev/sdb                     xfs    rw,relatime,seclabel,attr2,inode64,noquota
+└─/hadoop/disk5 /dev/sde                     xfs    rw,relatime,seclabel,attr2,inode64,noquota
+
+
+
+f the file system is in use, use the fuser utility to determine which processes are accessing it. For example:
+
+$ fuser --mount /run/media/user/FlashDrive
+
+/run/media/user/FlashDrive: 18351
+      
+      
+     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     
+     https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_file_systems/assembly_mounting-file-systems_managing-file-systems
+      
+      
+      lsblk --fs /dev/sdf
+NAME FSTYPE LABEL UUID                                 MOUNTPOINT
+sdf  xfs          82bfb5e3-f33c-493d-a955-13baf779b25b
+
+
+Run this command to remount the file system:
+
+mount -n -o remount,rw / 
+###################################
+#power BI - reporting side 
+--------------------------------------------
+
+cognos or business object >> tools for reporting 
+
+--> what their expectations  are : 
+-> Environment upgrades 
+-> production dates 
+-> Cloud testings 
+-> Upgrade with composite 
+->  when to have proof of concept ready 
+-> 
+#----------------------------------------------
+
+-> Hive PERMISSIONS ON HDP migration  
+-> hive xml change 
+
+->  Spark eRROR
+- Spark dataframe 
+- spark read write permissions 
+- mainframe performance issue ( DB2 mainframe info ) 
+
+# task lists: (Manage your work properly) 
+WHAT I am I accomplishing today 
+- How important is this work (The current wok) 
+- How important is the new work (new priority)
+- How do I escalate this info (GET Additional Resources)
+- Where is God in all of these(?????) 
+
+# show raj dashdb 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+      
